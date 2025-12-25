@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-ALGORITHM MINES</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00ffcc; --bg: #0a0b1e; }
+        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 20px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: var(--primary); margin: 0; text-shadow: 0 0 10px var(--primary); }
+        
+        /* واجهة تسجيل الدخول */
+        #login-page { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #1a1b3a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; background: linear-gradient(45deg, #00c6ff, #0072ff); color: white; font-weight: bold; cursor: pointer; }
+
+        /* شبكة الألغام */
+        #game-page { display: none; width: 100%; max-width: 400px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 20px 0; }
+        .cell { aspect-ratio: 1; background: #1a1b3a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: 0.3s; border: 1px solid #333; }
+        .cell.star { background: #ffcc00; box-shadow: 0 0 15px #ffcc00; color: #000; border: none; }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <div class="header">
+            <h1>X-ALGORITHM</h1>
+            <p>نظام التحليل السحابي</p>
+        </div>
+        <input type="text" id="player-id" placeholder="ID اللاعب">
+        <input type="password" id="pass" placeholder="كلمة السر">
+        <input type="text" id="promo" placeholder="البروموكود (إجباري)">
+        <p id="error" style="color: #ff4d4d; font-size: 14px; text-align: center;"></p>
+        <button onclick="login()">تفعيل السيرفر</button>
+    </div>
+
+    <div id="game-page">
+        <div class="header">
+            <h1>رادار الألغام 💣</h1>
+            <p>حالة الاتصال: <span style="color: var(--primary)">نشط ✅</span></p>
+        </div>
+        <div class="grid" id="grid"></div>
+        <button onclick="scan()">بدء الفحص (SCAN)</button>
+        <p style="font-size: 12px; color: #888; margin-top: 15px;">يجب تجديد الصفحة بعد كل دورة</p>
+    </div>
+
+    <script>
+        const gridElement = document.getElementById('grid');
+        for (let i = 0; i < 25; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.innerText = '?';
+            gridElement.appendChild(cell);
+        }
+
+        function login() {
+            const pass = document.getElementById('pass').value;
+            const promo = document.getElementById('promo').value.toUpperCase();
+            if(pass === "12345" && promo === "X100") { // استبدل X100 بكودك
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('game-page').style.display = 'block';
+            } else {
+                document.getElementById('error').innerText = "بيانات غير صحيحة أو حساب غير مفعل";
+            }
+        }
+
+        function scan() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(c => { c.innerText = '?'; c.className = 'cell'; });
+            
+            let stars = [];
+            while(stars.length < 4) {
+                let r = Math.floor(Math.random() * 25);
+                if(!stars.includes(r)) stars.push(r);
+            }
+
+            stars.forEach(idx => {
+                cells[idx].innerText = '⭐';
+                cells[idx].classList.add('star');
+            });
+            
+            // صوت وهمي (اختياري)
+            const audio = new Audio('https://www.soundjay.com/buttons/button-19.mp3');
+            audio.play();
+        }
+    </script>
+</body>
+</html>
